@@ -250,7 +250,7 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        if (statuspretest2 == 'pending') {
+                                        if (statuspretest1 == 'pending') {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
