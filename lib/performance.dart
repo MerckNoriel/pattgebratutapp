@@ -7,6 +7,7 @@ import 'package:pattgebratutapp/sidebar.dart';
 import 'package:pattgebratutapp/solvingequation/posttest/solvingequationposttestview.dart';
 import 'package:pattgebratutapp/thenthtermofasequence/posttest/thenthtermofasequenceposttest.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class PerformancePage extends StatefulWidget {
   const PerformancePage({super.key});
@@ -20,6 +21,7 @@ class _PerformancePage extends State<PerformancePage> {
   String status2 = 'pending';
   String status3 = 'pending';
   String status4 = 'pending';
+  String status5 = 'pending';
 
   String statuspretest1 = 'pending';
   String statuspretest2 = 'pending';
@@ -30,6 +32,9 @@ class _PerformancePage extends State<PerformancePage> {
   void initState() {
     super.initState();
     _loadData();
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
   Future<void> _loadData() async {
@@ -48,8 +53,9 @@ class _PerformancePage extends State<PerformancePage> {
       status2 = prefs.getString('thenthtermofasequenceposttestCompleted') ?? '';
       status3 = prefs.getString('algebraicexpressionposttestCompleted') ?? '';
       status4 = prefs.getString('algebraicequationposttestCompleted') ?? '';
+      status5 = prefs.getString('solvingequationposttestCompleted') ?? '';
 
-      print(status4);
+      print(status5);
     });
   }
 
@@ -262,7 +268,7 @@ class _PerformancePage extends State<PerformancePage> {
                 ),
                 onTap: () {
                   if (id == '1') {
-                    if (statuspretest1 != 'pending') {
+                    if (status != 'pending') {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -348,7 +354,7 @@ class _PerformancePage extends State<PerformancePage> {
                           );
                         },
                       );
-                    } else {
+                    } else if (status != 'completed') {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -357,7 +363,7 @@ class _PerformancePage extends State<PerformancePage> {
                     }
                   }
                   if (id == '2') {
-                    if (statuspretest2 != 'pending') {
+                    if (status2 != 'pending') {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -442,7 +448,7 @@ class _PerformancePage extends State<PerformancePage> {
                           );
                         },
                       );
-                    } else {
+                    } else if (status2 != 'completed') {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -450,7 +456,7 @@ class _PerformancePage extends State<PerformancePage> {
                                   const ThenthtermofasequenceposttestviewPage()));
                     }
                   } else if (id == '3') {
-                    if (preteststatus3 != 'pending') {
+                    if (status3 != 'pending') {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -536,7 +542,7 @@ class _PerformancePage extends State<PerformancePage> {
                           );
                         },
                       );
-                    } else {
+                    } else if (status3 != 'completed') {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -544,7 +550,7 @@ class _PerformancePage extends State<PerformancePage> {
                                   const Algebraicexpressionposttestview()));
                     }
                   } else if (id == '4') {
-                    if (preteststatus4 != 'pending') {
+                    if (status4 != 'pending') {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -630,7 +636,7 @@ class _PerformancePage extends State<PerformancePage> {
                           );
                         },
                       );
-                    } else {
+                    } else if (status4 != 'completed') {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -638,7 +644,7 @@ class _PerformancePage extends State<PerformancePage> {
                                   const Algebraicequationposttestview()));
                     }
                   } else if (id == '5') {
-                    if (preteststatus5 != 'pending') {
+                    if (status5 != 'pending') {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -725,7 +731,7 @@ class _PerformancePage extends State<PerformancePage> {
                           );
                         },
                       );
-                    } else {
+                    } else if (status5 != 'completed') {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -789,4 +795,4 @@ class _PerformancePage extends State<PerformancePage> {
   }
 }
 
-void main() => runApp(MaterialApp(home: PerformancePage()));
+void main() => runApp(const MaterialApp(home: PerformancePage()));

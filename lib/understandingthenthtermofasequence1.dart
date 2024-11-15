@@ -1,7 +1,10 @@
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pattgebratutapp/thenthtermofasequence.dart';
+import 'package:pattgebratutapp/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class UnderstandingthenthtermofasequencePage1 extends StatefulWidget {
   const UnderstandingthenthtermofasequencePage1({super.key});
@@ -22,6 +25,9 @@ class _UnderstandingthenthtermofasequencePage1State
     super.initState();
     initializeVideoPlayer();
     _loadBookmarkStatus();
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
   @override
@@ -83,7 +89,19 @@ class _UnderstandingthenthtermofasequencePage1State
                       color: Colors.white,
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      if (mark == 'mark') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const WelcomePage()));
+                      } else if (mark == 'unmark') {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ThenthtermofasequencePage()));
+                      }
                     },
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'package:pattgebratutapp/thenthtermofasequence.dart';
 import 'package:pattgebratutapp/top.dart';
 import 'package:pattgebratutapp/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class WrtingRulesForSequencePage extends StatefulWidget {
   const WrtingRulesForSequencePage({super.key});
@@ -21,6 +22,9 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
   void initState() {
     super.initState();
     _loadData(); // Load saved data on initialization
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
   Future<void> _loadData() async {
@@ -180,6 +184,12 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   const FibonacciSequencePage()));
+                                    } else if (statuspretest1 == 'completed') {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const FibonacciSequencePage()));
                                     }
                                   },
                                 )
@@ -240,7 +250,14 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        if (statuspretest2 != 'completed') {
+                                        if (statuspretest2 == 'pending') {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const ThenthtermofasequencePage()));
+                                        } else if (statuspretest2 ==
+                                            'completed') {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -308,7 +325,8 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                     ),
                                   )
                                 ],
-                              ))
+                              ),
+                            )
                     ],
                   ),
                 ),

@@ -207,16 +207,17 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
     } else {
       // Show a dialog or message when all questions are completed
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      // Always mark the test as "completed" and save the score
       if (score >= 15) {
         await prefs.setString('solvingequationposttestCompleted', 'completed');
       } else {
-        _clearSavedQuestions();
+        ();
       }
-
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const Solvingequationposttestview()));
+              builder: (context) => Solvingequationposttestview()));
     }
   }
 
@@ -224,11 +225,28 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(
         'solvingequationposttestsavedQuestions'); // Clear savedQuestions from local storage
-    await prefs.setString('solvingequationposttestCompleted', 'pending');
-    await prefs.setInt('solvingequationposttestscore', 0);
     setState(() {
-      savedQuestions.clear(); // Clear the savedQuestions list in the app
-      // Optionally, you can also reset other related state variables if needed
+      savedQuestions.clear();
+    });
+  }
+
+  Future<void> _resetQuiz() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Clear the saved data in SharedPreferences
+    await prefs.remove('solvingequationposttestscore');
+    await prefs.remove('solvingequationposttestcorrectAnswers');
+    await prefs.remove('solvingequationposttestsavedQuestions');
+    await prefs.remove('solvingequationposttestCompleted');
+
+    // Reset state variables
+    setState(() {
+      score = 0;
+      correctAnswers.clear();
+      savedQuestions.clear();
+      currentQuestionIndex = 0;
+      _selectedAnswer = null;
+      status = 'pending';
     });
   }
 
@@ -238,6 +256,9 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
 
     // Check if there are available questions after filtering
     bool hasQuestions = questions.isNotEmpty;
+
+    // Check if quiz is completed or showing the score
+    bool isQuizCompleted = currentQuestionIndex >= questions.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -432,7 +453,7 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
                                   color: _selectedAnswer ==
                                           questions[currentQuestionIndex]
                                               ['options'][index]
-                                      ? Colors.lightGreen
+                                      ? Colors.red
                                       : Color(0xFF2F6609),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -525,14 +546,17 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => WelcomePage()));
+                              onPressed: () async {
+                                await _resetQuiz(); // Call the reset function
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Solvingequationposttestview()),
+                                ); // Navigate to the quiz start
                               },
                               child: const Text(
-                                'Done',
+                                'Retake',
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,
@@ -544,14 +568,66 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
                         ],
                       )),
               ),
-              SizedBox(height: 10),
-              // ElevatedButton(
-              //   onPressed: _clearSavedQuestions,
-              //   child: Text("Clear Saved Questions"),
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.red,
-              //   ),
-              // ),
+              if (!isQuizCompleted) // Only show the buttons when the quiz is not completed
+                SizedBox(
+                  height: 150,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Back Button
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF2F6609),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              if (currentQuestionIndex > 0) {
+                                currentQuestionIndex--;
+                                _selectedAnswer =
+                                    null; // Reset selected answer for the previous question
+                              }
+                            });
+                          },
+                          child: Text(
+                            '< Back',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Next Button
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF2F6609),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              if (currentQuestionIndex < questions.length - 1) {
+                                currentQuestionIndex++;
+                                _selectedAnswer =
+                                    null; // Reset selected answer for the next question
+                              }
+                            });
+                          },
+                          child: Text(
+                            'Next > ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               SizedBox(height: 10),
             ],
           ),

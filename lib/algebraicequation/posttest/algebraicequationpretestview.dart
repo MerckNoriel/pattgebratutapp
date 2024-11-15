@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pattgebratutapp/algebraicequation.dart';
+import 'package:pattgebratutapp/understandingalgebraicequation1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Algebraicequationpretestview extends StatefulWidget {
@@ -258,6 +259,7 @@ class _Algebraicequationpretestview
 
     // Check if there are available questions after filtering
     bool hasQuestions = questions.isNotEmpty;
+    bool isTestCompleted = currentQuestionIndex >= questions.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -362,7 +364,7 @@ class _Algebraicequationpretestview
                                   color: _selectedAnswer ==
                                           questions[currentQuestionIndex]
                                               ['options'][index]
-                                      ? Colors.lightGreen
+                                      ? Colors.red
                                       : Color(0xFF2F6609),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -460,7 +462,7 @@ class _Algebraicequationpretestview
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            AlgebraicEquationPage()));
+                                            Understandingalgebraicequation1()));
                               },
                               child: const Text(
                                 'Proceed',
@@ -475,14 +477,66 @@ class _Algebraicequationpretestview
                         ],
                       )),
               ),
-              SizedBox(height: 10),
-              // ElevatedButton(
-              //   onPressed: _clearSavedQuestions,
-              //   child: Text("Clear Saved Questions"),
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.red,
-              //   ),
-              // ),
+              if (!isTestCompleted)
+                SizedBox(
+                  height: 150,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Back Button
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF2F6609),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              if (currentQuestionIndex > 0) {
+                                currentQuestionIndex--;
+                                _selectedAnswer =
+                                    null; // Reset selected answer for the previous question
+                              }
+                            });
+                          },
+                          child: Text(
+                            '< Back',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Next Button
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF2F6609),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              if (currentQuestionIndex < questions.length - 1) {
+                                currentQuestionIndex++;
+                                _selectedAnswer =
+                                    null; // Reset selected answer for the next question
+                              }
+                            });
+                          },
+                          child: Text(
+                            'Next > ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               SizedBox(height: 10),
             ],
           ),

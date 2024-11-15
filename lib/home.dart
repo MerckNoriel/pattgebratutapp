@@ -7,6 +7,7 @@ import 'package:pattgebratutapp/solvingequation.dart';
 import 'package:pattgebratutapp/top2.dart';
 import 'package:pattgebratutapp/writingrulesforsequence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,6 +29,9 @@ class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
     _loadData();
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
   Future<void> _loadData() async {
