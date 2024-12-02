@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pattgebratutapp/thenthtermofasequence.dart';
-import 'package:pattgebratutapp/understandingthenthtermofasequence1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThenthtermofasequencepretestviewPage extends StatefulWidget {
@@ -19,6 +18,8 @@ class _ThenthtermofasequencepretestviewPage
   List<String> correctAnswers = []; // To store correct answers
   int score = 0; // To keep track of the score
   List<String> savedQuestions = []; // To track saved questions
+  Map<int, String> _selectedAnswers =
+      {}; // Map to store selected answers by question index
 
   String status = 'pending';
 
@@ -39,7 +40,7 @@ class _ThenthtermofasequencepretestviewPage
       "options": [
         "1, 2, 4, 8, 16",
         "3, 6, 9, 12, 15",
-        ") 2, 4, 8, 16",
+        "2, 4, 8, 16",
         "1, 1, 2, 3, 5"
       ],
       "answer": "3, 6, 9, 12, 15"
@@ -212,13 +213,29 @@ class _ThenthtermofasequencepretestviewPage
 
     // Check if the selected answer is correct
     if (answer == questions[currentQuestionIndex]['answer']) {
-      correctAnswers.add(answer); // Add correct answer to the list
-      score++; // Increase score for the correct answer
-      await prefs.setStringList('thenthtermofasequencecorrectAnswers',
-          correctAnswers); // Save to local storage
-      await prefs.setInt('thenthtermofasequencepretestscore',
-          score); // Save score to local storage
-      await prefs.setString('thenthtermofasequencepretestCompleted', 'pending');
+      // Avoid duplicate scoring for the same question
+      if (!correctAnswers
+          .contains(questions[currentQuestionIndex]['question'])) {
+        correctAnswers.add(
+            questions[currentQuestionIndex]['question']); // Track the question
+        score++; // Increase score
+        await prefs.setStringList('thenthtermofasequencecorrectAnswers',
+            correctAnswers); // Save correct answers
+        await prefs.setInt(
+            'thenthtermofasequencepretestscore', score); // Save score
+      }
+    } else {
+      // Handle case where the answer changes from correct to incorrect
+      if (correctAnswers
+          .contains(questions[currentQuestionIndex]['question'])) {
+        correctAnswers.remove(questions[currentQuestionIndex]
+            ['question']); // Remove from correct answers
+        score--; // Decrease score
+        await prefs.setStringList('thenthtermofasequencecorrectAnswers',
+            correctAnswers); // Save updated correct answers
+        await prefs.setInt(
+            'thenthtermofasequencepretestscore', score); // Save updated score
+      }
     }
 
     // Save the current question to the savedQuestions list
@@ -226,36 +243,43 @@ class _ThenthtermofasequencepretestviewPage
     await prefs.setStringList('thenthtermofasequencesavedQuestions',
         savedQuestions); // Save to local storage
 
-    // Print score and move to the next question automatically
-    print("Score: $score"); // Print the current score
-    _nextQuestion();
-  }
+    // Check if it's the last question
+    if (currentQuestionIndex == questions.length - 1) {
+      // If it's the last question, print the final score
+      print("Score: $score");
 
-  void _nextQuestion() async {
-    if (currentQuestionIndex < questions.length - 1) {
-      setState(() {
-        currentQuestionIndex++;
-        _selectedAnswer = null; // Reset selected answer for the next question
-      });
+      // Mark the test as completed if the score is 15 or above
+      if (score >= 15) {
+        await prefs.setString(
+            'thenthtermofasequencepretestCompleted', 'completed');
+      }
+
+      // Navigate to the results page or handle end of quiz here
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ThenthtermofasequencepretestviewPage(),
+        ),
+      );
     } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString(
-          'thenthtermofasequencepretestCompleted', 'completed');
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ThenthtermofasequencepretestviewPage()));
+      // If not the last question, wait for the user to press next manually
+      print("Score: $score"); // Print the current score
     }
   }
 
   Future<void> _clearSavedQuestions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('thenthtermofasequencepretestscore');
     await prefs.remove(
         'thenthtermofasequencesavedQuestions'); // Clear savedQuestions from local storage
+    await prefs.remove('thenthtermofasequencecorrectAnswers');
 
     // Clear the local list
     setState(() {
+      score = 0;
       savedQuestions.clear(); // Clear the savedQuestions list in the app
+      correctAnswers.clear();
+
       // Optionally, you can also reset other related state variables if needed
     });
   }
@@ -296,21 +320,22 @@ class _ThenthtermofasequencepretestviewPage
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Container(
-                      margin: EdgeInsets.only(top: 30, left: 20),
-                      alignment: Alignment.bottomLeft,
-                      child: GestureDetector(
-                        child: FaIcon(FontAwesomeIcons.arrowLeft,
-                            color: Colors.white),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ThenthtermofasequencePage()));
-                        },
+                    if (!isTestCompleted)
+                      Container(
+                        margin: EdgeInsets.only(top: 30, left: 20),
+                        alignment: Alignment.bottomLeft,
+                        child: GestureDetector(
+                          child: FaIcon(FontAwesomeIcons.arrowLeft,
+                              color: Colors.white),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ThenthtermofasequencePage()));
+                          },
+                        ),
                       ),
-                    ),
                     SizedBox(height: 20),
                     Container(
                       padding: EdgeInsets.all(20),
@@ -361,6 +386,8 @@ class _ThenthtermofasequencepretestviewPage
                                   _selectedAnswer =
                                       questions[currentQuestionIndex]['options']
                                           [index];
+                                  _selectedAnswers[currentQuestionIndex] =
+                                      _selectedAnswer!; // Save the selected answer
                                 });
                                 _saveSelectedAnswer(_selectedAnswer!);
                               },
@@ -371,7 +398,7 @@ class _ThenthtermofasequencepretestviewPage
                                   color: _selectedAnswer ==
                                           questions[currentQuestionIndex]
                                               ['options'][index]
-                                      ? Colors.red
+                                      ? Colors.lightGreen
                                       : Color(0xFF2F6609),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -469,7 +496,7 @@ class _ThenthtermofasequencepretestviewPage
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            UnderstandingthenthtermofasequencePage1()));
+                                            const ThenthtermofasequencePage()));
                               },
                               child: const Text(
                                 'Proceed',
@@ -502,7 +529,8 @@ class _ThenthtermofasequencepretestviewPage
                               if (currentQuestionIndex > 0) {
                                 currentQuestionIndex--;
                                 _selectedAnswer =
-                                    null; // Reset selected answer for the previous question
+                                    _selectedAnswers[currentQuestionIndex] ??
+                                        null; // Restore the previous answer
                               }
                             });
                           },
@@ -528,7 +556,8 @@ class _ThenthtermofasequencepretestviewPage
                               if (currentQuestionIndex < questions.length - 1) {
                                 currentQuestionIndex++;
                                 _selectedAnswer =
-                                    null; // Reset selected answer for the next question
+                                    _selectedAnswers[currentQuestionIndex] ??
+                                        null; // Restore the previous answer
                               }
                             });
                           },

@@ -23,11 +23,6 @@ class _PerformancePage extends State<PerformancePage> {
   String status4 = 'pending';
   String status5 = 'pending';
 
-  String statuspretest1 = 'pending';
-  String statuspretest2 = 'pending';
-  String preteststatus3 = 'pending';
-  String preteststatus4 = 'pending';
-  String preteststatus5 = 'pending';
   @override
   void initState() {
     super.initState();
@@ -40,15 +35,6 @@ class _PerformancePage extends State<PerformancePage> {
   Future<void> _loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      statuspretest1 = prefs.getString('fibonaccipretestCompleted') ?? '';
-      statuspretest2 =
-          prefs.getString('thenthtermofasequencepretestCompleted') ?? '';
-      preteststatus3 =
-          prefs.getString('algebraicexpressionpretestCompleted') ?? '';
-      preteststatus4 =
-          prefs.getString('algebraicequationpretestCompleted') ?? '';
-      preteststatus5 = prefs.getString('solvingequationpretestCompleted') ?? '';
-
       status = prefs.getString('fibonacciposttestCompleted') ?? '';
       status2 = prefs.getString('thenthtermofasequenceposttestCompleted') ?? '';
       status3 = prefs.getString('algebraicexpressionposttestCompleted') ?? '';

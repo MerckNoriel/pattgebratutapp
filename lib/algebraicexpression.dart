@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pattgebratutapp/algebraicexpression/posttest/algrebraicexpressionpretestview.dart';
 import 'package:pattgebratutapp/top.dart';
+import 'package:pattgebratutapp/understandingalgebraicexpression1.dart';
 import 'package:pattgebratutapp/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
@@ -141,105 +141,11 @@ class _AlgebraicExpressionPage extends State<AlgebraicExpressionPage> {
                                 color: Colors.white,
                               ),
                               onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Color.fromARGB(221, 48, 102, 9),
-                                              Color.fromARGB(238, 48, 102, 9)
-                                            ],
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 30),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Take a pre test to know your knowledge about the Algebraic Expression before proceeding to topic. Do you confirm?',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 19),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            SizedBox(height: 20),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  const Algebraicexpressionpretestview()));
-                                                    },
-                                                    child: Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 40,
-                                                              vertical: 5),
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              Color(0xFF2F6609),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20)),
-                                                      child: Text(
-                                                        'YES',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                    )),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 40,
-                                                            vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            Color(0xFF2F6609),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20)),
-                                                    child: Text(
-                                                      'NO',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Understandingalgebraicexpression1()));
                               },
                             )
                           ],

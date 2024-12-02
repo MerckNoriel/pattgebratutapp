@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pattgebratutapp/algebraicequation.dart';
-import 'package:pattgebratutapp/understandingalgebraicequation1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Algebraicequationpretestview extends StatefulWidget {
@@ -21,6 +20,9 @@ class _Algebraicequationpretestview
   List<String> savedQuestions = []; // To track saved questions
   String status = 'pending';
   // List of questions and answers
+  Map<int, String> _selectedAnswers =
+      {}; // Map to store selected answers by question index
+
   final List<Map<String, dynamic>> questions = [
     {
       "question": "Translate: The sum of a number and 22 is 50.",
@@ -206,13 +208,29 @@ class _Algebraicequationpretestview
 
     // Check if the selected answer is correct
     if (answer == questions[currentQuestionIndex]['answer']) {
-      correctAnswers.add(answer); // Add correct answer to the list
-      score++; // Increase score for the correct answer
-      await prefs.setStringList('algebraicequationcorrectAnswers',
-          correctAnswers); // Save to local storage
-      await prefs.setInt('algebraicequationpretestscore',
-          score); // Save score to local storage
-      await prefs.setString('algebraicequationpretestCompleted', 'pending');
+      // Avoid duplicate scoring for the same question
+      if (!correctAnswers
+          .contains(questions[currentQuestionIndex]['question'])) {
+        correctAnswers.add(
+            questions[currentQuestionIndex]['question']); // Track the question
+        score++; // Increase score
+        await prefs.setStringList('algebraicequationcorrectAnswers',
+            correctAnswers); // Save correct answers
+        await prefs.setInt(
+            'algebraicequationpretestscore', score); // Save score
+      }
+    } else {
+      // Handle case where the answer changes from correct to incorrect
+      if (correctAnswers
+          .contains(questions[currentQuestionIndex]['question'])) {
+        correctAnswers.remove(questions[currentQuestionIndex]
+            ['question']); // Remove from correct answers
+        score--; // Decrease score
+        await prefs.setStringList('algebraicequationcorrectAnswers',
+            correctAnswers); // Save updated correct answers
+        await prefs.setInt(
+            'algebraicequationpretestscore', score); // Save updated score
+      }
     }
 
     // Save the current question to the savedQuestions list
@@ -220,35 +238,41 @@ class _Algebraicequationpretestview
     await prefs.setStringList('algebraicequationsavedQuestions',
         savedQuestions); // Save to local storage
 
-    // Print score and move to the next question automatically
-    print("Score: $score"); // Print the current score
-    _nextQuestion();
-  }
+    // Check if it's the last question
+    if (currentQuestionIndex == questions.length - 1) {
+      // If it's the last question, print the final score
+      print("Score: $score");
 
-  void _nextQuestion() async {
-    if (currentQuestionIndex < questions.length - 1) {
-      setState(() {
-        currentQuestionIndex++;
-        _selectedAnswer = null; // Reset selected answer for the next question
-      });
+      // Mark the test as completed if the score is 15 or above
+      if (score >= 15) {
+        await prefs.setString('algebraicequationpretestCompleted', 'completed');
+      }
+
+      // Navigate to the results page or handle end of quiz here
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Algebraicequationpretestview(),
+        ),
+      );
     } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('algebraicequationpretestCompleted', 'completed');
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Algebraicequationpretestview()));
+      // If not the last question, wait for the user to press next manually
+      print("Score: $score"); // Print the current score
     }
   }
 
   Future<void> _clearSavedQuestions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('algebraicequationpretestscore');
     await prefs.remove(
         'algebraicequationsavedQuestions'); // Clear savedQuestions from local storage
+    await prefs.remove('algebraicequationcorrectAnswers');
 
     // Clear the local list
     setState(() {
+      score = 0;
       savedQuestions.clear(); // Clear the savedQuestions list in the app
+      correctAnswers.clear();
       // Optionally, you can also reset other related state variables if needed
     });
   }
@@ -289,21 +313,22 @@ class _Algebraicequationpretestview
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Container(
-                      margin: EdgeInsets.only(top: 30, left: 20),
-                      alignment: Alignment.bottomLeft,
-                      child: GestureDetector(
-                        child: FaIcon(FontAwesomeIcons.arrowLeft,
-                            color: Colors.white),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AlgebraicEquationPage()));
-                        },
+                    if (!isTestCompleted)
+                      Container(
+                        margin: EdgeInsets.only(top: 30, left: 20),
+                        alignment: Alignment.bottomLeft,
+                        child: GestureDetector(
+                          child: FaIcon(FontAwesomeIcons.arrowLeft,
+                              color: Colors.white),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        AlgebraicEquationPage()));
+                          },
+                        ),
                       ),
-                    ),
                     SizedBox(height: 20),
                     Container(
                       padding: EdgeInsets.all(20),
@@ -354,6 +379,8 @@ class _Algebraicequationpretestview
                                   _selectedAnswer =
                                       questions[currentQuestionIndex]['options']
                                           [index];
+                                  _selectedAnswers[currentQuestionIndex] =
+                                      _selectedAnswer!; // Save the selected answer
                                 });
                                 _saveSelectedAnswer(_selectedAnswer!);
                               },
@@ -364,7 +391,7 @@ class _Algebraicequationpretestview
                                   color: _selectedAnswer ==
                                           questions[currentQuestionIndex]
                                               ['options'][index]
-                                      ? Colors.red
+                                      ? Colors.lightGreen
                                       : Color(0xFF2F6609),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -462,7 +489,7 @@ class _Algebraicequationpretestview
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            Understandingalgebraicequation1()));
+                                            const AlgebraicEquationPage()));
                               },
                               child: const Text(
                                 'Proceed',
@@ -495,7 +522,8 @@ class _Algebraicequationpretestview
                               if (currentQuestionIndex > 0) {
                                 currentQuestionIndex--;
                                 _selectedAnswer =
-                                    null; // Reset selected answer for the previous question
+                                    _selectedAnswers[currentQuestionIndex] ??
+                                        null; // Restore the previous answer
                               }
                             });
                           },
@@ -521,7 +549,8 @@ class _Algebraicequationpretestview
                               if (currentQuestionIndex < questions.length - 1) {
                                 currentQuestionIndex++;
                                 _selectedAnswer =
-                                    null; // Reset selected answer for the next question
+                                    _selectedAnswers[currentQuestionIndex] ??
+                                        null; // Restore the previous answer
                               }
                             });
                           },

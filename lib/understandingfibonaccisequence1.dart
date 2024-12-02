@@ -32,7 +32,6 @@ class _UnderstandingfibonaccisequencePage1State
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     _controller.dispose();
     super.dispose();
   }

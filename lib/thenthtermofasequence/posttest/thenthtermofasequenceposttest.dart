@@ -20,6 +20,9 @@ class _ThenthtermofasequenceposttestviewPage
   List<String> savedQuestions = []; // To track saved questions
   String status = 'pending';
 
+  Map<int, String> _selectedAnswers =
+      {}; // Map to store selected answers by question index
+
   // List of questions and answers
   final List<Map<String, dynamic>> questions = [
     {
@@ -211,14 +214,29 @@ class _ThenthtermofasequenceposttestviewPage
 
     // Check if the selected answer is correct
     if (answer == questions[currentQuestionIndex]['answer']) {
-      correctAnswers.add(answer); // Add correct answer to the list
-      score++; // Increase score for the correct answer
-      await prefs.setStringList('thenthtermofasequenceposttestcorrectAnswers',
-          correctAnswers); // Save to local storage
-      await prefs.setInt('thenthtermofasequenceposttestscore',
-          score); // Save score to local storage
-      await prefs.setString(
-          'thenthtermofasequenceposttestCompleted', 'pending');
+      // Avoid duplicate scoring for the same question
+      if (!correctAnswers
+          .contains(questions[currentQuestionIndex]['question'])) {
+        correctAnswers.add(
+            questions[currentQuestionIndex]['question']); // Track the question
+        score++; // Increase score
+        await prefs.setStringList('thenthtermofasequenceposttestcorrectAnswers',
+            correctAnswers); // Save correct answers
+        await prefs.setInt(
+            'thenthtermofasequenceposttestscore', score); // Save score
+      }
+    } else {
+      // Handle case where the answer changes from correct to incorrect
+      if (correctAnswers
+          .contains(questions[currentQuestionIndex]['question'])) {
+        correctAnswers.remove(questions[currentQuestionIndex]
+            ['question']); // Remove from correct answers
+        score--; // Decrease score
+        await prefs.setStringList('thenthtermofasequenceposttestcorrectAnswers',
+            correctAnswers); // Save updated correct answers
+        await prefs.setInt(
+            'thenthtermofasequenceposttestscore', score); // Save updated score
+      }
     }
 
     // Save the current question to the savedQuestions list
@@ -226,32 +244,27 @@ class _ThenthtermofasequenceposttestviewPage
     await prefs.setStringList('thenthtermofasequenceposttestsavedQuestions',
         savedQuestions); // Save to local storage
 
-    // Print score and move to the next question automatically
-    print("Score: $score"); // Print the current score
-    _nextQuestion();
-  }
+    // Check if it's the last question
+    if (currentQuestionIndex == questions.length - 1) {
+      // If it's the last question, print the final score
+      print("Score: $score");
 
-  void _nextQuestion() async {
-    if (currentQuestionIndex < questions.length - 1) {
-      setState(() {
-        currentQuestionIndex++;
-        _selectedAnswer = null; // Reset selected answer for the next question
-      });
-    } else {
-      // Show a dialog or message when all questions are completed
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      // Always mark the test as "completed" and save the score
+      // Mark the test as completed if the score is 15 or above
       if (score >= 15) {
         await prefs.setString(
             'thenthtermofasequenceposttestCompleted', 'completed');
-      } else {
-        ();
       }
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ThenthtermofasequenceposttestviewPage()));
+
+      // Navigate to the results page or handle end of quiz here
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ThenthtermofasequenceposttestviewPage(),
+        ),
+      );
+    } else {
+      // If not the last question, wait for the user to press next manually
+      print("Score: $score"); // Print the current score
     }
   }
 
@@ -323,105 +336,107 @@ class _ThenthtermofasequenceposttestviewPage
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Container(
-                      margin: EdgeInsets.only(top: 30, left: 20),
-                      alignment: Alignment.bottomLeft,
-                      child: GestureDetector(
-                        child: FaIcon(FontAwesomeIcons.arrowLeft,
-                            color: Colors.white),
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color.fromARGB(221, 48, 102, 9),
-                                        Color.fromARGB(238, 48, 102, 9)
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
+                    if (!isQuizCompleted)
+                      Container(
+                        margin: EdgeInsets.only(top: 30, left: 20),
+                        alignment: Alignment.bottomLeft,
+                        child: GestureDetector(
+                          child: FaIcon(FontAwesomeIcons.arrowLeft,
+                              color: Colors.white),
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 30),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'Confirm to exit? Your Progress will be save.',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 19),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(height: 20),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            WelcomePage()));
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 40,
-                                                    vertical: 5),
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xFF2F6609),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                child: Text(
-                                                  'YES',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              )),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 40,
-                                                    vertical: 5),
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xFF2F6609),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                child: Text(
-                                                  'NO',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              )),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color.fromARGB(221, 48, 102, 9),
+                                          Color.fromARGB(238, 48, 102, 9)
                                         ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
                                       ),
-                                    ],
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 30),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'Confirm to exit?',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 19),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(height: 20),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const WelcomePage()));
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 40,
+                                                      vertical: 5),
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFF2F6609),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  child: Text(
+                                                    'YES',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                )),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 40,
+                                                      vertical: 5),
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFF2F6609),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  child: Text(
+                                                    'NO',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                )),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
                     SizedBox(height: 20),
                     score < 15
                         ? Text(
@@ -478,6 +493,8 @@ class _ThenthtermofasequenceposttestviewPage
                                   _selectedAnswer =
                                       questions[currentQuestionIndex]['options']
                                           [index];
+                                  _selectedAnswers[currentQuestionIndex] =
+                                      _selectedAnswer!; // Save the selected answer
                                 });
                                 _saveSelectedAnswer(_selectedAnswer!);
                               },
@@ -488,7 +505,7 @@ class _ThenthtermofasequenceposttestviewPage
                                   color: _selectedAnswer ==
                                           questions[currentQuestionIndex]
                                               ['options'][index]
-                                      ? Colors.red
+                                      ? Colors.lightGreen
                                       : Color(0xFF2F6609),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -599,6 +616,34 @@ class _ThenthtermofasequenceposttestviewPage
                               ),
                             ),
                           ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 47),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF2F6609),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: TextButton(
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const WelcomePage()),
+                                );
+                              },
+                              child: const Text(
+                                'Done',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       )),
               ),
@@ -620,7 +665,8 @@ class _ThenthtermofasequenceposttestviewPage
                               if (currentQuestionIndex > 0) {
                                 currentQuestionIndex--;
                                 _selectedAnswer =
-                                    null; // Reset selected answer for the previous question
+                                    _selectedAnswers[currentQuestionIndex] ??
+                                        null; // Restore the previous answer
                               }
                             });
                           },
@@ -646,7 +692,8 @@ class _ThenthtermofasequenceposttestviewPage
                               if (currentQuestionIndex < questions.length - 1) {
                                 currentQuestionIndex++;
                                 _selectedAnswer =
-                                    null; // Reset selected answer for the next question
+                                    _selectedAnswers[currentQuestionIndex] ??
+                                        null; // Restore the previous answer
                               }
                             });
                           },
