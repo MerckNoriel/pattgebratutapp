@@ -135,7 +135,7 @@ class _Algebraicequationposttestview
         "Thirty-two minus eight is a number.",
         "A number plus eight equals thirty-two.",
         "The sum of eight and a number is thirty-two.",
-        "Eight more than a number is thirty-two"
+        "Eight more than a number equals thirty-two"
       ],
       "answer": "Eight more than a number equals thirty-two"
     },
