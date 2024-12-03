@@ -50,6 +50,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -64,12 +65,17 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - assets/Fibonacci_Sequence.mp4
-    - assets/Nth_Term_of_a_Sequence.mp4
-    - assets/Algebraic_Expression.mp4
-    - assets/Algebraic_Equation.mp4
-    - assets/Solving_Equation.mp4
+    - assets/logo.png
+    - assets/Fibonacci_Sequence1.mp4
+    - assets/Nth_Term_of_a_Sequence1.mp4
+    - assets/Algebraic_Expression1.mp4
+    - assets/Algebraic_Equation1.mp4
+    - assets/Solving_Equation1.mp4
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo.png"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
