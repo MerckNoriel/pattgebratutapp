@@ -18,7 +18,7 @@ class _UnderstandingthenthtermofasequencePage1State
     extends State<UnderstandingthenthtermofasequencePage1> {
   late CustomVideoPlayerController _controller;
 
-  String videopath = "assets/Nth_Term_of_a_Sequence.mp4";
+  String videopath = "assets/Nth_Term_of_a_Sequence1.mp4";
 
   @override
   void initState() {

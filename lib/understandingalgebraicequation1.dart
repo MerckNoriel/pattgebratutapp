@@ -18,7 +18,7 @@ class _Understandingalgebraicequation1State
     extends State<Understandingalgebraicequation1> {
   late CustomVideoPlayerController _controller;
 
-  String videopath = "assets/Algebraic_Equation.mp4";
+  String videopath = "assets/Algebraic_Equation1.mp4";
 
   @override
   void initState() {

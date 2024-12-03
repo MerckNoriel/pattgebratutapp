@@ -18,7 +18,7 @@ class _Understandingsolvingequation1State
     extends State<Understandingsolvingequation1> {
   late CustomVideoPlayerController _controller;
 
-  String videopath = "assets/Solving_Equation.mp4";
+  String videopath = "assets/Solving_Equation1.mp4";
 
   @override
   void initState() {
