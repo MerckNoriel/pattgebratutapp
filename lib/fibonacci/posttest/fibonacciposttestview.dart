@@ -257,9 +257,9 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Clear saved data except for the "completed" status
-    await prefs.remove('algebraicequationposttestscore');
-    await prefs.remove('algebraicequationposttestcorrectAnswers');
-    await prefs.remove('algebraicequationposttestsavedQuestions');
+    await prefs.remove('fibonacciposttestscore');
+    await prefs.remove('fibonacciposttestcorrectAnswers');
+    await prefs.remove('fibonacciposttestsavedQuestions');
 
     // Reset state variables
     setState(() {
