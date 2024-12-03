@@ -247,8 +247,13 @@ class _Algebraicexpressionposttestview
       // If it's the last question, print the final score
       print("Score: $score");
 
-      // Mark the test as completed if the score is 15 or above
-      if (score >= 15) {
+      // Check if the quiz is already marked as completed
+      bool isAlreadyCompleted =
+          prefs.getString('algebraicexpressionposttestCompleted') ==
+              'completed';
+
+      // Mark as completed only if the score is 15 or above, or it is already completed
+      if (score >= 15 || isAlreadyCompleted) {
         await prefs.setString(
             'algebraicexpressionposttestCompleted', 'completed');
       }
@@ -283,7 +288,6 @@ class _Algebraicexpressionposttestview
     await prefs.remove('algebraicexpressionposttestscore');
     await prefs.remove('algebraicexpressionposttestcorrectAnswers');
     await prefs.remove('algebraicexpressionposttestsavedQuestions');
-    await prefs.remove('algebraicexpressionposttestCompleted');
 
     // Reset state variables
     setState(() {

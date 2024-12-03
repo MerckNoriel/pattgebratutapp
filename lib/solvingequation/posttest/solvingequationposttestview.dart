@@ -217,8 +217,12 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
       // If it's the last question, print the final score
       print("Score: $score");
 
-      // Mark the test as completed if the score is 15 or above
-      if (score >= 15) {
+      // Check if the quiz is already marked as completed
+      bool isAlreadyCompleted =
+          prefs.getString('solvingequationposttestCompleted') == 'completed';
+
+      // Mark as completed only if the score is 15 or above, or it is already completed
+      if (score >= 15 || isAlreadyCompleted) {
         await prefs.setString('solvingequationposttestCompleted', 'completed');
       }
 
@@ -251,7 +255,6 @@ class _Solvingequationposttestview extends State<Solvingequationposttestview> {
     await prefs.remove('solvingequationposttestscore');
     await prefs.remove('solvingequationposttestcorrectAnswers');
     await prefs.remove('solvingequationposttestsavedQuestions');
-    await prefs.remove('solvingequationposttestCompleted');
 
     // Reset state variables
     setState(() {

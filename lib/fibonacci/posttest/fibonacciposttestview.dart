@@ -217,8 +217,12 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
       // If it's the last question, print the final score
       print("Score: $score");
 
-      // Mark the test as completed if the score is 15 or above
-      if (score >= 15) {
+      // Check if the quiz is already marked as completed
+      bool isAlreadyCompleted =
+          prefs.getString('fibonacciposttestCompleted') == 'completed';
+
+      // Mark as completed only if the score is 15 or above, or it is already completed
+      if (score >= 15 || isAlreadyCompleted) {
         await prefs.setString('fibonacciposttestCompleted', 'completed');
       }
 
@@ -252,11 +256,10 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
   Future<void> _resetQuiz() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // Clear the saved data in SharedPreferences
-    await prefs.remove('fibonacciposttestscore');
-    await prefs.remove('fibonacciposttestcorrectAnswers');
-    await prefs.remove('fibonacciposttestsavedQuestions');
-    await prefs.remove('fibonacciposttestCompleted');
+    // Clear saved data except for the "completed" status
+    await prefs.remove('algebraicequationposttestscore');
+    await prefs.remove('algebraicequationposttestcorrectAnswers');
+    await prefs.remove('algebraicequationposttestsavedQuestions');
 
     // Reset state variables
     setState(() {
