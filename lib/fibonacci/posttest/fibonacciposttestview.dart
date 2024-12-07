@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pattgebratutapp/welcome.dart';
-import 'package:pattgebratutapp/writingrulesforsequence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FibonacciposttestviewPage extends StatefulWidget {
@@ -622,21 +621,12 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
                               ),
                               child: TextButton(
                                 onPressed: () async {
-                                  if (status == 'pending') {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const WelcomePage()),
-                                    );
-                                  } else if (status == 'completed') {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const WrtingRulesForSequencePage()),
-                                    );
-                                  }
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const WelcomePage()),
+                                  );
                                 },
                                 child: const Text(
                                   'Done',
