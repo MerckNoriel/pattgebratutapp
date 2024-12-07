@@ -17,7 +17,7 @@ class PerformancePage extends StatefulWidget {
 }
 
 class _PerformancePage extends State<PerformancePage> {
-  String status = 'pending';
+  String statuspretest1 = 'pending';
   String status2 = 'pending';
   String status3 = 'pending';
   String status4 = 'pending';
@@ -35,11 +35,11 @@ class _PerformancePage extends State<PerformancePage> {
   Future<void> _loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      status = prefs.getString('fibonacciposttestCompleted') ?? '';
-      status2 = prefs.getString('thenthtermofasequenceposttestCompleted') ?? '';
-      status3 = prefs.getString('algebraicexpressionposttestCompleted') ?? '';
-      status4 = prefs.getString('algebraicequationposttestCompleted') ?? '';
-      status5 = prefs.getString('solvingequationposttestCompleted') ?? '';
+      statuspretest1 = prefs.getString('fibonaccipretestCompleted') ?? '';
+      status2 = prefs.getString('thenthtermofasequencepretestCompleted') ?? '';
+      status3 = prefs.getString('algebraicexpressionpretestCompleted') ?? '';
+      status4 = prefs.getString('algebraicequationpretestCompleted') ?? '';
+      status5 = prefs.getString('solvingequationpretestCompleted') ?? '';
 
       print(status5);
     });
@@ -196,17 +196,19 @@ class _PerformancePage extends State<PerformancePage> {
                         decoration: BoxDecoration(border: Border.all(width: 1)),
                       ),
                       const SizedBox(height: 15),
-                      widgetCard('1', 'Fibonacci Suquence Test'),
-                      status == 'completed'
+                      statuspretest1 == 'completed'
+                          ? widgetCard('1', 'Fibonacci Suquence Test')
+                          : widgetCard2('1', 'Fibonacci Suquence Test'),
+                      status2 == 'completed'
                           ? widgetCard('2', 'The Nth of a Sequence Test')
                           : widgetCard2('2', 'The Nth of a Sequence Test'),
-                      status2 == 'completed'
+                      status3 == 'completed'
                           ? widgetCard('3', 'Algebraic Expression')
                           : widgetCard2('3', 'Algebraic Expression'),
-                      status3 == 'completed'
+                      status4 == 'completed'
                           ? widgetCard('4', 'Algebraic Equation')
                           : widgetCard2('4', 'Algebraic Equation'),
-                      status4 == 'completed'
+                      status5 == 'completed'
                           ? widgetCard('5', 'Solving Equation')
                           : widgetCard2('5', 'Solving Equation'),
                     ],
@@ -254,7 +256,7 @@ class _PerformancePage extends State<PerformancePage> {
                 ),
                 onTap: () {
                   if (id == '1') {
-                    if (status != 'pending') {
+                    if (statuspretest1 != 'pending') {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -340,7 +342,7 @@ class _PerformancePage extends State<PerformancePage> {
                           );
                         },
                       );
-                    } else if (status != 'completed') {
+                    } else if (statuspretest1 != 'completed') {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -735,47 +737,147 @@ class _PerformancePage extends State<PerformancePage> {
   }
 
   widgetCard2(String id, String label1) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(197, 61, 116, 25),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Stack(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: label1,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+    return GestureDetector(
+      onTap: () {
+        if (id == '1') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Lock Test'),
+                content: const Text(
+                    'You need to take the Fibonacci Sequence pre-test and review to unlock and take this post-test.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (id == '2') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Lock Test'),
+                content: const Text(
+                    'You need to take the Nth Term of a Sequence pre-test and review to unlock and take this post-test.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (id == '3') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Lock Test'),
+                content: const Text(
+                    'You need to take the Algebraic Expression pre-test and review to unlock and take this post-test.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (id == '4') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Lock Test'),
+                content: const Text(
+                    'You need to take the Algebraic Equation pre-test and review to unlock and take this post-test.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (id == '5') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Lock Test'),
+                content: const Text(
+                    'You need to take the Solving Equation pre-test and review to unlock and take this post-test.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(197, 61, 116, 25),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: label1,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              FaIcon(
-                FontAwesomeIcons.circleArrowRight,
-                color: Colors.white,
-              ),
-            ],
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: FaIcon(
-              FontAwesomeIcons.lock,
-              size: 28,
-              color: const Color.fromARGB(210, 216, 216, 216),
+                FaIcon(
+                  FontAwesomeIcons.circleArrowRight,
+                  color: Colors.white,
+                ),
+              ],
             ),
-          )
-        ],
+            Container(
+              alignment: Alignment.center,
+              child: FaIcon(
+                FontAwesomeIcons.lock,
+                size: 28,
+                color: const Color.fromARGB(210, 216, 216, 216),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

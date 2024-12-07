@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pattgebratutapp/welcome.dart';
+import 'package:pattgebratutapp/writingrulesforsequence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FibonacciposttestviewPage extends StatefulWidget {
@@ -23,35 +24,38 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
   // List of questions and answers
   final List<Map<String, dynamic>> questions = [
     {
-      "question":
+      "question": //1
           "How many rows does Pascal's Triangle have to contain to find the 8th Fibonacci number through diagonals?",
       "options": ["5", "7", "8", "9"],
       "answer": "8"
     },
     {
-      "question":
+      "question": //2
           "What is the sum of the numbers in the first row of Pascal's Triangle?",
       "options": ["1", "2", "3", "4"],
       "answer": "1"
     },
     {
-      "question":
+      "question": //3
           "In Pascal's Triangle, what number is located at row 4, position 2?",
       "options": ["1", "4", "6", "3"],
       "answer": "3"
     },
     {
-      "question": "What are the first two numbers of the Fibonacci Sequence?",
+      "question": //4
+          "What are the first two numbers of the Fibonacci Sequence?",
       "options": ["1,1", "0,1", "1,2", "2,3"],
       "answer": "0,1"
     },
     {
-      "question": "Which of the following is NOT a Fibonacci number?",
+      "question": //5
+          "Which of the following is NOT a Fibonacci number?",
       "options": ["0", "4", "3", "21"],
       "answer": "4"
     },
     {
-      "question": "What is the pattern for generating Fibonacci numbers?",
+      "question": //6
+          "What is the pattern for generating Fibonacci numbers?",
       "options": [
         "Subtract the previous two numbers",
         "Multiply the previous two numbers",
@@ -61,7 +65,8 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
       "answer": "Add the previous two numbers"
     },
     {
-      "question": "What is Pascal's Triangle?",
+      "question": //7
+          "What is Pascal's Triangle?",
       "options": [
         "A square arrangement of numbers",
         "A triangular arrangement of numbers",
@@ -71,7 +76,7 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
       "answer": "A triangular arrangement of numbers"
     },
     {
-      "question":
+      "question": //8
           "How do you find the Fibonacci numbers using Pascal's Triangle?",
       "options": [
         "By summing the rows",
@@ -82,7 +87,7 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
       "answer": "By summing the diagonals"
     },
     {
-      "question":
+      "question": //9
           "Which of the following describes the relationship between Pascal's Triangle and the Fibonacci Sequence?",
       "options": [
         "Both are generated using the same mathematical operation.",
@@ -94,12 +99,14 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
           "Fibonacci numbers appear as sums of the diagonals in Pascal's Triangle."
     },
     {
-      "question": "What is the first number in the Fibonacci Sequence?",
+      "question": //10
+          "What is the first number in the Fibonacci Sequence?",
       "options": ["1", "3", "2", "0"],
       "answer": "0"
     },
     {
-      "question": "How is each number in Pascal's Triangle created?",
+      "question": //11
+          "How is each number in Pascal's Triangle created?",
       "options": [
         "By adding the two numbers above it",
         "By multiplying the two numbers above it",
@@ -109,48 +116,56 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
       "answer": "By adding the two numbers above it"
     },
     {
-      "question": "What is the third Fibonacci number?",
+      "question": //12
+          "What is the third Fibonacci number?",
       "options": ["1", "2", "3", "5"],
       "answer": "2"
     },
     {
-      "question":
+      "question": //13
           "Which operation can be performed with two Fibonacci numbers?",
       "options": ["Addition", "Subtraction", "Multiplication", "Division"],
       "answer": "Division"
     },
     {
-      "question": "What is the sum of the first two Fibonacci numbers?",
+      "question": //14
+          "What is the sum of the first two Fibonacci numbers?",
       "options": ["3", "2", "1", "0"],
       "answer": "1"
     },
     {
-      "question": "What is the fifth Fibonacci number?",
+      "question": //15
+          "What is the fifth Fibonacci number?",
       "options": ["3", "13", "8", "5"],
       "answer": "5"
     },
     {
-      "question": "How is the number 21 obtained in the Fibonacci Sequence?",
+      "question": //16
+          "How is the number 21 obtained in the Fibonacci Sequence?",
       "options": ["13 + 8", "8 + 5", "5 + 3", "34 - 13"],
       "answer": "13 + 8"
     },
     {
-      "question": "What is 13 - 8?",
+      "question": //17
+          "What is 13 - 8?",
       "options": ["5", "3", "8", "1"],
       "answer": "5"
     },
     {
-      "question": "If you multiply 5 by 3, what is the result?",
+      "question": //18
+          "If you multiply 5 by 3, what is the result?",
       "options": ["15", "8", "18", "13"],
       "answer": "15"
     },
     {
-      "question": "What is the fourth Fibonacci number?",
+      "question": //19
+          "What is the fourth Fibonacci number?",
       "options": ["2", "3", "5", "8"],
       "answer": "3"
     },
     {
-      "question": "What is 21 ÷ 3",
+      "question": //20
+          "What is 21 ÷ 3",
       "options": ["5", "10", "7", "6"],
       "answer": "7"
     }
@@ -215,7 +230,7 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
     // Check if it's the last question
     if (currentQuestionIndex == questions.length - 1) {
       // If it's the last question, print the final score
-      print("Score: $score");
+      print(" Score: $score");
 
       // Check if the quiz is already marked as completed
       bool isAlreadyCompleted =
@@ -428,6 +443,7 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
                           children: [
                             TextSpan(
                               text: hasQuestions
+                                  // Displays the current question number and text if there are questions
                                   ? "${currentQuestionIndex + 1}. ${questions[currentQuestionIndex]['question']}\n"
                                   : "",
                               style: TextStyle(
@@ -446,6 +462,7 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
               SizedBox(height: 10),
               Text(
                 hasQuestions
+                    // Displays the current question number and total questions if questions exist
                     ? "Question ${currentQuestionIndex + 1}/ ${questions.length}"
                     : "",
                 style: TextStyle(
@@ -465,12 +482,14 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
+                                  // Update the selected answer when an option is tapped
                                   _selectedAnswer =
                                       questions[currentQuestionIndex]['options']
                                           [index];
                                   _selectedAnswers[currentQuestionIndex] =
                                       _selectedAnswer!; // Save the selected answer
                                 });
+                                // Call the function to save the selected answer and update score
                                 _saveSelectedAnswer(_selectedAnswer!);
                               },
                               child: Container(
@@ -603,12 +622,21 @@ class _FibonacciposttestviewPage extends State<FibonacciposttestviewPage> {
                               ),
                               child: TextButton(
                                 onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const WelcomePage()),
-                                  );
+                                  if (status == 'pending') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const WelcomePage()),
+                                    );
+                                  } else if (status == 'completed') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const WrtingRulesForSequencePage()),
+                                    );
+                                  }
                                 },
                                 child: const Text(
                                   'Done',

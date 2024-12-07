@@ -137,7 +137,7 @@ class _Algebraicexpressionposttestview
         "The sum of eight and a number is thirty-two.",
         "Eight more than a number is thirty-two"
       ],
-      "answer": "Eight more than a number equals thirty-two"
+      "answer": "Eight more than a number is thirty-two"
     },
     {
       "question": "Translate: Four times a number plus 9 equals 25.",

@@ -249,7 +249,7 @@ class _ThenthtermofasequencepretestviewPage
       print("Score: $score");
 
       // Mark the test as completed if the score is 15 or above
-      if (score >= 15) {
+      if (score >= 1) {
         await prefs.setString(
             'thenthtermofasequencepretestCompleted', 'completed');
       }

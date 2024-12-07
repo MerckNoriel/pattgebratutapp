@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pattgebratutapp/algebraicequation.dart';
 import 'package:pattgebratutapp/algebraicequation/posttest/algebraicequationpretestview.dart';
+import 'package:pattgebratutapp/algebraicexpression.dart';
 import 'package:pattgebratutapp/algebraicexpression/posttest/algrebraicexpressionpretestview.dart';
 import 'package:pattgebratutapp/sidebar.dart';
+import 'package:pattgebratutapp/solvingequation.dart';
 import 'package:pattgebratutapp/solvingequation/posttest/solvingequationpretestview.dart';
 import 'package:pattgebratutapp/top2.dart';
 import 'package:pattgebratutapp/writingrulesforsequence.dart';
@@ -19,6 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   String status = 'pending';
+  String status1 = 'pending';
   String status2 = 'pending';
   String status3 = 'pending';
 
@@ -37,7 +41,8 @@ class _HomePage extends State<HomePage> {
   Future<void> _loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      status = prefs.getString('thenthtermofasequenceposttestCompleted') ?? '';
+      status = prefs.getString('fibonacciposttestCompleted') ?? '';
+      status1 = prefs.getString('thenthtermofasequenceposttestCompleted') ?? '';
       status2 = prefs.getString('algebraicexpressionposttestCompleted') ?? '';
       status3 = prefs.getString('algebraicequationposttestCompleted') ?? '';
 
@@ -128,7 +133,7 @@ class _HomePage extends State<HomePage> {
                       const SizedBox(height: 15),
                       widgetCard('1', 'Lesson 1: ',
                           'Writing Rules For Sequence \n', '2 Topic'),
-                      status == 'completed'
+                      status1 == 'completed'
                           ? widgetCard('2', 'Lesson 2: ',
                               'Algebraic Expresssion  \n', '1 Topic')
                           : widgetCard2('2', 'Lesson 2: ',
@@ -210,48 +215,71 @@ class _HomePage extends State<HomePage> {
                               builder: (context) =>
                                   const WrtingRulesForSequencePage()));
                     } else if (id == '2') {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color.fromARGB(221, 48, 102, 9),
-                                    Color.fromARGB(238, 48, 102, 9)
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                      if (preteststatus1 == 'pending') {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 30),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Take a pre test to know your knowledge about the Algebraic Expression before proceeding to the topic. Do you confirm?',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 19),
-                                    textAlign: TextAlign.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(221, 48, 102, 9),
+                                      Color.fromARGB(238, 48, 102, 9)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                  SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 30),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Take a pre test to know your knowledge about the Algebraic Expression before proceeding to topic. Do you confirm?',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 19),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Algebraicexpressionpretestview()));
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 40, vertical: 5),
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xFF2F6609),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: Text(
+                                                'YES',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            )),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
                                           onTap: () {
                                             Navigator.of(context).pop();
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Algebraicexpressionpretestview()));
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
@@ -261,83 +289,93 @@ class _HomePage extends State<HomePage> {
                                                 borderRadius:
                                                     BorderRadius.circular(20)),
                                             child: Text(
-                                              'YES',
+                                              'NO',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                          )),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 40, vertical: 5),
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFF2F6609),
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: Text(
-                                            'NO',
-                                            style:
-                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
+                            );
+                          },
+                        );
+                      } else if (preteststatus1 == 'completed') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AlgebraicExpressionPage()));
+                      }
                     } else if (id == '3') {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color.fromARGB(221, 48, 102, 9),
-                                    Color.fromARGB(238, 48, 102, 9)
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                      if (preteststatus2 == 'pending') {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 30),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Take a pre test to know your knowledge about the Algebraic Equation before proceeding to the topic. Do you confirm?',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 19),
-                                    textAlign: TextAlign.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(221, 48, 102, 9),
+                                      Color.fromARGB(238, 48, 102, 9)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                  SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 30),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Take a pre test to know your knowledge about the Algebraic Expression before proceeding to topic. Do you confirm?',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 19),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Algebraicequationpretestview()));
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 40, vertical: 5),
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xFF2F6609),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: Text(
+                                                'YES',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            )),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
                                           onTap: () {
                                             Navigator.of(context).pop();
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Algebraicequationpretestview()));
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
@@ -347,83 +385,93 @@ class _HomePage extends State<HomePage> {
                                                 borderRadius:
                                                     BorderRadius.circular(20)),
                                             child: Text(
-                                              'YES',
+                                              'NO',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                          )),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 40, vertical: 5),
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFF2F6609),
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: Text(
-                                            'NO',
-                                            style:
-                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
+                            );
+                          },
+                        );
+                      } else if (preteststatus2 == 'completed') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AlgebraicEquationPage()));
+                      }
                     } else if (id == '4') {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color.fromARGB(221, 48, 102, 9),
-                                    Color.fromARGB(238, 48, 102, 9)
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                      if (preteststatus3 == 'pending') {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 30),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Take a pre test to know your knowledge about the Solving Equation before proceeding to the topic. Do you confirm?',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 19),
-                                    textAlign: TextAlign.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(221, 48, 102, 9),
+                                      Color.fromARGB(238, 48, 102, 9)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                  SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 30),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Take a pre test to know your knowledge about the Algebraic Expression before proceeding to topic. Do you confirm?',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 19),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Solvingequationpretestview()));
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 40, vertical: 5),
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xFF2F6609),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: Text(
+                                                'YES',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            )),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
                                           onTap: () {
                                             Navigator.of(context).pop();
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Solvingequationpretestview()));
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
@@ -433,40 +481,27 @@ class _HomePage extends State<HomePage> {
                                                 borderRadius:
                                                     BorderRadius.circular(20)),
                                             child: Text(
-                                              'YES',
+                                              'NO',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                          )),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 40, vertical: 5),
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFF2F6609),
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: Text(
-                                            'NO',
-                                            style:
-                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
+                            );
+                          },
+                        );
+                      } else if (preteststatus3 == 'completed') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const SolvingEquationPage()));
+                      }
                     }
                   },
                 )
@@ -477,7 +512,68 @@ class _HomePage extends State<HomePage> {
   }
 
   widgetCard2(String id, String label1, String label2, String label3) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        if (id == '2') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Lock Lesson'),
+                content: Text(
+                    'You need to pass the Nth Term post-test to unlock this lesson.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (id == '3') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Lock Lesson'),
+                content: const Text(
+                    'You need to pass the Algebraic Expression post-test to unlock this lesson.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (id == '4') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Lock Lesson'),
+                content: const Text(
+                    'You need to pass the Algebraic Equation post-test to unlock this lesson.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      },
+      child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -519,22 +615,148 @@ class _HomePage extends State<HomePage> {
                     ],
                   ),
                 ),
-                const FaIcon(
-                  FontAwesomeIcons.circleArrowRight,
-                  color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    if (id == '2') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Lock Lesson'),
+                            content: Text(
+                                'You need to pass the Nth Term post-test to unlock this lesson.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else if (id == '3') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Lock Lesson'),
+                            content: Text(
+                                'You need to pass the Algebraic Expression post-test to unlock this lesson.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else if (id == '4') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Lock Lesson'),
+                            content: Text(
+                                'You need to pass the Algebraic Equation post-test to unlock this lesson.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child: const FaIcon(
+                    FontAwesomeIcons.circleArrowRight,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
             Container(
               alignment: Alignment.center,
-              child: const FaIcon(
-                FontAwesomeIcons.lock,
-                size: 28,
-                color: Color.fromARGB(210, 216, 216, 216),
+              child: GestureDetector(
+                onTap: () {
+                  if (id == '2') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Lock Lesson'),
+                          content: Text(
+                              'You need to pass the Nth Term post-test to unlock this lesson.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (id == '3') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Lock Lesson'),
+                          content: Text(
+                              'You need to pass the Algebraic Expression post-test to unlock this lesson.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (id == '4') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Lock Lesson'),
+                          content: Text(
+                              'You need to pass the Algebraic Equation post-test to unlock this lesson.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                child: FaIcon(
+                  FontAwesomeIcons.lock,
+                  size: 28,
+                  color: Color.fromARGB(210, 216, 216, 216),
+                ),
               ),
-            )
+            ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
 

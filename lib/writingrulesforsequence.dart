@@ -39,8 +39,8 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
       status = prefs.getString('fibonacciposttestCompleted') ??
           ''; // Load saved score
 
-      print(statuspretest1);
-      print(statuspretest2);
+      print("pretest: ${statuspretest1}");
+      print("pretest: ${statuspretest2}");
       print(status);
     });
   }
@@ -161,52 +161,82 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                 color: Colors.white,
                               ),
                               onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Color.fromARGB(221, 48, 102, 9),
-                                              Color.fromARGB(238, 48, 102, 9)
-                                            ],
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                          ),
+                                if (statuspretest1 == 'pending') {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20),
                                         ),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 30),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Take a pre test to know your knowledge about the Fibonacci Sequence before proceeding to the topic. Do you confirm?',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 19),
-                                              textAlign: TextAlign.center,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Color.fromARGB(221, 48, 102, 9),
+                                                Color.fromARGB(238, 48, 102, 9)
+                                              ],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
                                             ),
-                                            SizedBox(height: 20),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                GestureDetector(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 30),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'Take a pre test to know your knowledge about the Fibonacci Sequence before proceeding to the topic. Do you confirm?',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 19),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              SizedBox(height: 20),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        FibonaccipretestviewPage()));
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 40,
+                                                                vertical: 5),
+                                                        decoration: BoxDecoration(
+                                                            color: Color(
+                                                                0xFF2F6609),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                        child: Text(
+                                                          'YES',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      )),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  GestureDetector(
                                                     onTap: () {
                                                       Navigator.of(context)
                                                           .pop();
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  const FibonaccipretestviewPage()));
                                                     },
                                                     child: Container(
                                                       padding:
@@ -221,45 +251,28 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                                                   .circular(
                                                                       20)),
                                                       child: Text(
-                                                        'YES',
+                                                        'NO',
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.white),
                                                       ),
-                                                    )),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 40,
-                                                            vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            Color(0xFF2F6609),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20)),
-                                                    child: Text(
-                                                      'NO',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                      );
+                                    },
+                                  );
+                                } else if (statuspretest1 == 'completed') {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const FibonacciSequencePage()));
+                                }
                               },
                             )
                           ],
@@ -306,58 +319,92 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                       color: Colors.white,
                                     ),
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Dialog(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  colors: [
-                                                    Color.fromARGB(
-                                                        221, 48, 102, 9),
-                                                    Color.fromARGB(
-                                                        238, 48, 102, 9)
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                ),
+                                      if (statuspretest2 == '') {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(20),
                                               ),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 30),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    'Take a pre test to know your knowledge about the The Nth Term of a Sequence before proceeding to the topic. Do you confirm?',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 19),
-                                                    textAlign: TextAlign.center,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                    colors: [
+                                                      Color.fromARGB(
+                                                          221, 48, 102, 9),
+                                                      Color.fromARGB(
+                                                          238, 48, 102, 9)
+                                                    ],
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
                                                   ),
-                                                  SizedBox(height: 20),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      GestureDetector(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                    vertical: 30),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      'Take a pre test to know your knowledge about the The Nth Term of a Sequence before proceeding to the topic. Do you confirm?',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 19),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    SizedBox(height: 20),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              const ThenthtermofasequencepretestviewPage()));
+                                                            },
+                                                            child: Container(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          40,
+                                                                      vertical:
+                                                                          5),
+                                                              decoration: BoxDecoration(
+                                                                  color: Color(
+                                                                      0xFF2F6609),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20)),
+                                                              child: Text(
+                                                                'YES',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            )),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        GestureDetector(
                                                           onTap: () {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            ThenthtermofasequencepretestviewPage()));
                                                           },
                                                           child: Container(
                                                             padding: EdgeInsets
@@ -374,109 +421,159 @@ class _WrtingRulesForSequencePage extends State<WrtingRulesForSequencePage> {
                                                                         .circular(
                                                                             20)),
                                                             child: Text(
-                                                              'YES',
+                                                              'NO',
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .white),
                                                             ),
-                                                          )),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      40,
-                                                                  vertical: 5),
-                                                          decoration: BoxDecoration(
-                                                              color: Color(
-                                                                  0xFF2F6609),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20)),
-                                                          child: Text(
-                                                            'NO',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      );
+                                            );
+                                          },
+                                        );
+                                      } else if (statuspretest2 ==
+                                          'completed') {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ThenthtermofasequencePage()));
+                                      }
                                     },
                                   )
                                 ],
                               ),
                             )
-                          : Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              padding: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(197, 61, 116, 25),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      RichText(
-                                        text: const TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text:
-                                                  "The Nth Term of a Sequence\n",
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white,
+                          : GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Lock Topic'),
+                                      content: const Text(
+                                          'You need to pass the Fibonacci Sequence post-test to unlock this topic.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Close the dialog
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                padding: EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(197, 61, 116, 25),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        RichText(
+                                          text: const TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    "The Nth Term of a Sequence\n",
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                            ),
-                                            TextSpan(
-                                              text: '1 Lecture',
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white,
+                                              TextSpan(
+                                                text: '1 Lecture',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white,
+                                                ),
                                               ),
+                                            ],
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title:
+                                                      const Text('Lock Topic'),
+                                                  content: const Text(
+                                                      'You need to pass the Fibonacci Sequence post-test to unlock this topic.'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // Close the dialog
+                                                      },
+                                                      child: const Text('OK'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            child: FaIcon(
+                                              FontAwesomeIcons.circleArrowRight,
+                                              color: Colors.white,
                                             ),
-                                          ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('Lock Topic'),
+                                              content: const Text(
+                                                  'You need to pass the Fibonacci Sequence post-test to unlock this topic.'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(); // Close the dialog
+                                                  },
+                                                  child: const Text('OK'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: FaIcon(
+                                          FontAwesomeIcons.lock,
+                                          size: 28,
+                                          color: const Color.fromARGB(
+                                              210, 216, 216, 216),
                                         ),
                                       ),
-                                      Container(
-                                        child: FaIcon(
-                                          FontAwesomeIcons.circleArrowRight,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: FaIcon(
-                                      FontAwesomeIcons.lock,
-                                      size: 28,
-                                      color: const Color.fromARGB(
-                                          210, 216, 216, 216),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             )
                     ],
